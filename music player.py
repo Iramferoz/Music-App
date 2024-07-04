@@ -1,0 +1,130 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "0a0cbd4d",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "pygame 2.5.2 (SDL 2.28.3, Python 3.9.7)\n",
+      "Hello from the pygame community. https://www.pygame.org/contribute.html\n"
+     ]
+    }
+   ],
+   "source": [
+    "import tkinter as tk\n",
+    "from tkinter import filedialog\n",
+    "from tkinter import Canvas\n",
+    "import pygame\n",
+    "\n",
+    "class MusicPlayer:\n",
+    "    def __init__(self, root):\n",
+    "        self.root = root\n",
+    "        self.root.title(\"Music Player\")\n",
+    "        self.root.geometry(\"400x300\")\n",
+    "        self.root.configure(bg=\"black\")  # Set background color to black\n",
+    "\n",
+    "        pygame.mixer.init()\n",
+    "\n",
+    "        self.current_file = None\n",
+    "\n",
+    "        self.create_widgets()\n",
+    "\n",
+    "    def create_widgets(self):\n",
+    "        # Top Frame for logo or image\n",
+    "        top_frame = tk.Frame(self.root, bg=\"black\")  # Set background color to black\n",
+    "        top_frame.pack(pady=10)\n",
+    "\n",
+    "        self.logo_label = tk.Label(top_frame, text=\"♪\", font=(\"Helvetica\", 100), fg=\"#1e90ff\", bg=\"black\")\n",
+    "        self.logo_label.pack()\n",
+    "\n",
+    "        # Middle Frame for controls\n",
+    "        control_frame = tk.Frame(self.root, bg=\"black\")  # Set background color to black\n",
+    "        control_frame.pack(pady=20)\n",
+    "\n",
+    "        self.create_rounded_button(control_frame, \"Load\", self.load_music, \"#4CAF50\", 0)\n",
+    "        self.create_rounded_button(control_frame, \"Play\", self.play_music, \"#2196F3\", 1)\n",
+    "        self.create_rounded_button(control_frame, \"Pause\", self.pause_music, \"#FFC107\", 2)\n",
+    "        self.create_rounded_button(control_frame, \"Stop\", self.stop_music, \"#F44336\", 3)\n",
+    "\n",
+    "        # Bottom Frame for status\n",
+    "        self.status_label = tk.Label(\n",
+    "            self.root, text=\"Status: Stopped\", font=(\"Helvetica\", 12), fg=\"#ffffff\", bg=\"black\"\n",
+    "        )\n",
+    "        self.status_label.pack(pady=10)\n",
+    "\n",
+    "    def create_rounded_button(self, frame, text, command, color, col):\n",
+    "        canvas = Canvas(frame, width=80, height=80, bg=\"black\", highlightthickness=0)\n",
+    "        canvas.grid(row=0, column=col, padx=5)\n",
+    "        \n",
+    "        canvas.create_oval(10, 10, 70, 70, fill=color, outline=color)\n",
+    "        \n",
+    "        button = tk.Button(frame, text=text, command=command, font=(\"Helvetica\", 10),\n",
+    "                           bg=color, fg=\"#ffffff\", activebackground=color, relief=\"flat\",\n",
+    "                           highlightthickness=0)\n",
+    "        button_canvas = canvas.create_window(40, 40, window=button, width=60, height=60, anchor=\"center\")\n",
+    "\n",
+    "    def load_music(self):\n",
+    "        file_path = filedialog.askopenfilename(filetypes=[(\"Music Files\", \"*.mp3 *.wav\")])\n",
+    "        if file_path:\n",
+    "            self.current_file = file_path\n",
+    "            self.status_label.config(text=f\"Loaded: {file_path}\")\n",
+    "\n",
+    "    def play_music(self):\n",
+    "        if self.current_file:\n",
+    "            pygame.mixer.music.load(self.current_file)\n",
+    "            pygame.mixer.music.play()\n",
+    "            self.status_label.config(text=\"Status: Playing\")\n",
+    "        else:\n",
+    "            self.status_label.config(text=\"No file loaded\")\n",
+    "\n",
+    "    def pause_music(self):\n",
+    "        if pygame.mixer.music.get_busy():\n",
+    "            pygame.mixer.music.pause()\n",
+    "            self.status_label.config(text=\"Status: Paused\")\n",
+    "\n",
+    "    def stop_music(self):\n",
+    "        pygame.mixer.music.stop()\n",
+    "        self.status_label.config(text=\"Status: Stopped\")\n",
+    "\n",
+    "if __name__ == \"__main__\":\n",
+    "    root = tk.Tk()\n",
+    "    app = MusicPlayer(root)\n",
+    "    root.mainloop()\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "c08539b0",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.7"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
